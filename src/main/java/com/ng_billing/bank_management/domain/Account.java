@@ -22,7 +22,7 @@ public class Account {
         this.balance = balance;
     }
 
-    public Account(int account_number, float balance) {
+    public Account(int accountNumber, float balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
