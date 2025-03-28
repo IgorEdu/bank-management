@@ -1,14 +1,16 @@
 package com.ng_billing.bank_management.controller;
 
 import com.ng_billing.bank_management.domain.Account;
-import com.ng_billing.bank_management.domain.AccountResponseDTO;
+import com.ng_billing.bank_management.domain.AccountDTO;
+import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
 import com.ng_billing.bank_management.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/conta")
@@ -21,15 +23,32 @@ public class AccountController {
     }
 
     @GetMapping()
-    public ResponseEntity<AccountResponseDTO> getAccount(@RequestParam("numero_conta") int accountNumber){
-        Account account = accountService.getAccountByNumber(accountNumber);
+    public ResponseEntity<AccountDTO> getAccount(@RequestParam("numero_conta") int accountNumber){
+        Optional<Account> account = accountService.getAccountByNumber(accountNumber);
 
-        if(account == null){
+        if(account.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        AccountResponseDTO response = new AccountResponseDTO(account.getAccountNumber(), account.getBalance());
+        AccountDTO response = new AccountDTO(account.get().getAccountNumber(), account.get().getBalance());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Object> createAccount(@RequestBody AccountDTO request){
+        try {
+            Account account = new Account(request.accountNumber(), request.balance());
+            AccountDTO response = accountService.createAccount(account);
+
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{accountNumber}")
+                    .buildAndExpand(response.accountNumber())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(response);
+        } catch (AccountAlreadyExistsException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
