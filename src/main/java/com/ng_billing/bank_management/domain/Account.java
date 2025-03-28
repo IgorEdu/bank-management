@@ -10,20 +10,20 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private int account_number;
+    private int accountNumber;
     private float balance;
 
     public Account() {
     }
 
-    public Account(UUID id, int account_number, float balance) {
+    public Account(UUID id, int accountNumber, float balance) {
         this.id = id;
-        this.account_number = account_number;
+        this.accountNumber = accountNumber;
         this.balance = balance;
     }
 
     public Account(int account_number, float balance) {
-        this.account_number = account_number;
+        this.accountNumber = accountNumber;
         this.balance = balance;
     }
 
@@ -31,8 +31,8 @@ public class Account {
         return id;
     }
 
-    public int getAccount_number() {
-        return account_number;
+    public int getAccountNumber() {
+        return accountNumber;
     }
 
     public float getBalance() {
