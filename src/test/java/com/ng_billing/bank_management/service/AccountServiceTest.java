@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -30,23 +32,23 @@ class AccountServiceTest {
 
     @Test
     void testGetAccountByNumber_ReturnsAccount() {
-        when(accountRepository.findByAccountNumber(234)).thenReturn(account);
+        when(accountRepository.findByAccountNumber(234)).thenReturn(Optional.of(account));
 
-        Account result = accountService.getAccountByNumber(234);
+        Optional<Account> result = accountService.getAccountByNumber(234);
 
         verify(accountRepository).findByAccountNumber(234);
 
         assertNotNull(result);
-        assertEquals(234, result.getAccountNumber());
-        assertEquals(170.07f, result.getBalance());
+        assertEquals(234, result.get().getAccountNumber());
+        assertEquals(170.07f, result.get().getBalance());
     }
 
     @Test
     void testGetAccountByNumber_ReturnsNull_WhenAccountDoesNotExist() {
-        when(accountRepository.findByAccountNumber(234)).thenReturn(null);
+        when(accountRepository.findByAccountNumber(234)).thenReturn(Optional.empty());
 
-        Account result = accountService.getAccountByNumber(234);
+        Optional<Account> result = accountService.getAccountByNumber(234);
 
-        assertNull(result);
+        assertFalse(result.isPresent());
     }
 }

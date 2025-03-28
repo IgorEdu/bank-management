@@ -1,7 +1,7 @@
 package com.ng_billing.bank_management.controller;
 
 import com.ng_billing.bank_management.domain.Account;
-import com.ng_billing.bank_management.domain.AccountResponseDTO;
+import com.ng_billing.bank_management.domain.AccountDTO;
 import com.ng_billing.bank_management.service.AccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,9 +35,9 @@ class AccountControllerTest {
 
     @Test
     void testGetAccount_ReturnsAccount() {
-        when(accountService.getAccountByNumber(234)).thenReturn(account);
+        when(accountService.getAccountByNumber(234)).thenReturn(Optional.of(account));
 
-        ResponseEntity<AccountResponseDTO> response = accountController.getAccount(234);
+        ResponseEntity<AccountDTO> response = accountController.getAccount(234);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -45,9 +47,9 @@ class AccountControllerTest {
 
     @Test
     void testGetAccount_ReturnsNotFound_WhenAccountDoesNotExist() {
-        when(accountService.getAccountByNumber(234)).thenReturn(null);
+        when(accountService.getAccountByNumber(234)).thenReturn(Optional.empty());
 
-        ResponseEntity<AccountResponseDTO> response = accountController.getAccount(234);
+        ResponseEntity<AccountDTO> response = accountController.getAccount(234);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
