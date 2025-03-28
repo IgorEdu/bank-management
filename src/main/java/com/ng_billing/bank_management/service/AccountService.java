@@ -1,8 +1,12 @@
 package com.ng_billing.bank_management.service;
 
 import com.ng_billing.bank_management.domain.Account;
+import com.ng_billing.bank_management.domain.AccountDTO;
+import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
 import com.ng_billing.bank_management.repository.AccountRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -12,8 +16,18 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account getAccountByNumber(int accountNumber) {
-        Account account = accountRepository.findByAccountNumber(accountNumber);
-        return account;
+    public Optional<Account> getAccountByNumber(int accountNumber) {
+        return accountRepository.findByAccountNumber(accountNumber);
+    }
+
+    public AccountDTO createAccount(Account account){
+        Optional<Account> existingAccount = accountRepository.findByAccountNumber(account.getAccountNumber());
+
+        if (existingAccount.isPresent()) {
+            throw new AccountAlreadyExistsException("Conta de número " + account.getAccountNumber() + " já existente.");
+        }
+
+        accountRepository.save(account);
+        return new AccountDTO(account.getAccountNumber(), account.getBalance());
     }
 }
