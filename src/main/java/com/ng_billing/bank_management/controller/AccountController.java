@@ -21,12 +21,11 @@ public class AccountController {
     }
 
     @GetMapping()
-    public ResponseEntity getAccount(@RequestParam("numero_conta") int accountNumber){
+    public ResponseEntity<AccountResponseDTO> getAccount(@RequestParam("numero_conta") int accountNumber){
         Account account = accountService.getAccountByNumber(accountNumber);
 
         if(account == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Conta não encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         AccountResponseDTO response = new AccountResponseDTO(account.getAccountNumber(), account.getBalance());
