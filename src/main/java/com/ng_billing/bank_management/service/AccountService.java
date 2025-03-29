@@ -33,7 +33,12 @@ public class AccountService {
     }
 
     public void decreaseBalance(Account account, BigDecimal value){
-        account.setBalance(value);
-        accountRepository.save(account);
+        BigDecimal valueDecreased = account.getBalance().subtract(value);
+
+        if (valueDecreased.compareTo(BigDecimal.ZERO) > 0) {
+            account.setBalance(valueDecreased);
+
+            accountRepository.save(account);
+        }
     }
 }
