@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -46,7 +47,7 @@ class AccountControllerTest {
         MockitoAnnotations.openMocks(this);
 
         objectMapper = new ObjectMapper();
-        account = new Account(234, 170.07f);
+        account = new Account(234, BigDecimal.valueOf(170.07f));
         accountDTO = new AccountDTO(account.getAccountNumber(), account.getBalance());
     }
 
