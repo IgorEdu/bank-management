@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 public record TransactionDTO(
         @NotNull(message = "Forma de pagamento não pode ser nulo")
+        @JsonProperty("forma_pagamento")
         TransactionType type,
 
         @NotNull(message = "Número da conta não pode ser nulo")
