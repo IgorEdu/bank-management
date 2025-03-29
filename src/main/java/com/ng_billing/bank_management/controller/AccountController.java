@@ -4,6 +4,7 @@ import com.ng_billing.bank_management.domain.Account;
 import com.ng_billing.bank_management.domain.AccountDTO;
 import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
 import com.ng_billing.bank_management.service.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class AccountController {
     }
 
     @PostMapping()
-    public ResponseEntity<Object> createAccount(@RequestBody AccountDTO request){
+    public ResponseEntity<Object> createAccount(@RequestBody @Valid AccountDTO request){
         try {
             Account account = new Account(request.accountNumber(), request.balance());
             AccountDTO response = accountService.createAccount(account);
@@ -47,7 +48,7 @@ public class AccountController {
 
             return ResponseEntity.created(location).body(response);
         } catch (AccountAlreadyExistsException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

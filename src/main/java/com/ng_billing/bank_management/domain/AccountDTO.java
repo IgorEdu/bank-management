@@ -1,4 +1,6 @@
 package com.ng_billing.bank_management.domain;
 
-public record AccountDTO(int accountNumber, float balance) {
+import jakarta.validation.constraints.NotNull;
+
+public record AccountDTO(@NotNull int accountNumber,@NotNull float balance) {
 }
