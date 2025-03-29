@@ -30,4 +30,9 @@ public class AccountService {
         accountRepository.save(account);
         return new AccountDTO(account.getAccountNumber(), account.getBalance());
     }
+
+    public void decreaseBalance(Account account, Float value){
+        account.setBalance(value);
+        accountRepository.save(account);
+    }
 }
