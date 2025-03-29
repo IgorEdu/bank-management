@@ -31,7 +31,7 @@ class AccountServiceTest {
 
     @BeforeEach
     void setUp() {
-        account = new Account(234, BigDecimal.valueOf(170.07f));
+        account = new Account(234, BigDecimal.valueOf(170.07));
     }
 
     @Test
@@ -45,7 +45,7 @@ class AccountServiceTest {
 
         assertNotNull(result);
         assertEquals(234, result.get().getAccountNumber());
-        assertEquals(170.07f, result.get().getBalance());
+        assertEquals(BigDecimal.valueOf(170.07), result.get().getBalance());
     }
 
     @Test
@@ -68,7 +68,7 @@ class AccountServiceTest {
 
         assertNotNull(result);
         assertEquals(234, result.accountNumber());
-        assertEquals(170.07f, result.balance());
+        assertEquals(BigDecimal.valueOf(170.07), result.balance());
         verify(accountRepository).save(account);
     }
 
