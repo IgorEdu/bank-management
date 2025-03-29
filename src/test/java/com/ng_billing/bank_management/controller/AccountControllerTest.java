@@ -36,6 +36,7 @@ class AccountControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private ObjectMapper objectMapper;
     private Account account;
     private AccountDTO accountDTO;
 
@@ -43,6 +44,7 @@ class AccountControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
+        objectMapper = new ObjectMapper();
         account = new Account(234, 170.07f);
         accountDTO = new AccountDTO(account.getAccountNumber(), account.getBalance());
     }
@@ -53,8 +55,8 @@ class AccountControllerTest {
 
         mockMvc.perform(get("/conta?numero_conta={accountNumber}", 234))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accountNumber").value(234))
-                .andExpect(jsonPath("$.balance").value(170.07));
+                .andExpect(jsonPath("$.numero_conta").value(234))
+                .andExpect(jsonPath("$.saldo").value(170.07));
 
         verify(accountService, times(1)).getAccountByNumber(234);
     }
@@ -77,10 +79,10 @@ class AccountControllerTest {
 
         mockMvc.perform(post("/conta")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(accountDTO)))
+                        .content(objectMapper.writeValueAsString(accountDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.accountNumber").value(234))
-                .andExpect(jsonPath("$.balance").value(170.07));
+                .andExpect(jsonPath("$.numero_conta").value(234))
+                .andExpect(jsonPath("$.saldo").value(170.07));
 
         verify(accountService, times(1)).createAccount(any());
     }
@@ -93,7 +95,7 @@ class AccountControllerTest {
 
         mockMvc.perform(post("/conta")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(accountDTO)))
+                        .content(objectMapper.writeValueAsString(accountDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Conta de número 234 já existente."));
     }
