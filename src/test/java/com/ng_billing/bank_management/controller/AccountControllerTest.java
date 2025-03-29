@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,10 +43,8 @@ class AccountControllerTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-
         objectMapper = new ObjectMapper();
-        account = new Account(234, BigDecimal.valueOf(170.07f));
+        account = new Account(234, BigDecimal.valueOf(170.07));
         accountDTO = new AccountDTO(account.getAccountNumber(), account.getBalance());
     }
 
@@ -105,4 +102,16 @@ class AccountControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Conta de número 234 já existente."));
     }
+
+    @Test
+    @DisplayName("Deve retornar 400 Bad Request quando dados inválidos forem fornecidos")
+    void shouldReturnBadRequestWhenInvalidDataProvided() throws Exception {
+        AccountDTO invalidAccountDTO = new AccountDTO(0, BigDecimal.valueOf(-100));
+
+        mockMvc.perform(post("/conta")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidAccountDTO)))
+                .andExpect(status().isBadRequest());
+    }
+
 }
