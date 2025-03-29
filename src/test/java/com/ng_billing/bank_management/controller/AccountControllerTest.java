@@ -6,6 +6,7 @@ import com.ng_billing.bank_management.domain.AccountDTO;
 import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
 import com.ng_billing.bank_management.service.AccountService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
@@ -50,7 +51,8 @@ class AccountControllerTest {
     }
 
     @Test
-    void testGetAccount_ReturnsAccount() throws Exception {
+    @DisplayName("Deve retornar detalhes da conta quando a conta existir")
+    void shouldReturnAccountWhenAccountExists() throws Exception {
         when(accountService.getAccountByNumber(234)).thenReturn(Optional.of(account));
 
         mockMvc.perform(get("/conta?numero_conta={accountNumber}", 234))
@@ -62,7 +64,8 @@ class AccountControllerTest {
     }
 
     @Test
-    void testGetAccount_ReturnsNotFound_WhenAccountDoesNotExist() throws Exception {
+    @DisplayName("Deve retornar 404 Not Found quando a conta não existir")
+    void shouldReturnNotFoundWhenAccountDoesNotExist() throws Exception {
         when(accountService.getAccountByNumber(234)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/conta?numero_conta={accountNumber}", 234))
@@ -74,7 +77,8 @@ class AccountControllerTest {
 
 
     @Test
-    void testCreateAccount_ReturnsCreated() throws Exception {
+    @DisplayName("Deve retornar 201 Created e JSON com detalhes da conta quando a conta for cadastrada com sucesso")
+    void shouldReturnCreatedWhenAccountIsSuccessfullyCreated() throws Exception {
         when(accountService.createAccount(any())).thenReturn(accountDTO);
 
         mockMvc.perform(post("/conta")
@@ -89,7 +93,8 @@ class AccountControllerTest {
 
 
     @Test
-    void testCreateAccount_ReturnsBadRequest_WhenAccountAlreadyExists() throws Exception {
+    @DisplayName("Deve retornar 400 Bad Request quando a tentar cadastrar conta já existente")
+    void shouldReturnBadRequestWhenAccountAlreadyExists() throws Exception {
         when(accountService.createAccount(any(Account.class)))
                 .thenThrow(new AccountAlreadyExistsException("Conta de número 234 já existente."));
 
