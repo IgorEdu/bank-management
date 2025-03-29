@@ -5,6 +5,7 @@ import com.ng_billing.bank_management.domain.AccountDTO;
 import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
 import com.ng_billing.bank_management.repository.AccountRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +34,8 @@ class AccountServiceTest {
     }
 
     @Test
-    void testGetAccountByNumber_ReturnsAccount() {
+    @DisplayName("Deve retornar a conta quando a conta com o número fornecido existir")
+    void shouldReturnAccountWhenAccountExists() {
         when(accountRepository.findByAccountNumber(234)).thenReturn(Optional.of(account));
 
         Optional<Account> result = accountService.getAccountByNumber(234);
@@ -46,7 +48,8 @@ class AccountServiceTest {
     }
 
     @Test
-    void testGetAccountByNumber_ReturnsNull_WhenAccountDoesNotExist() {
+    @DisplayName("Deve retornar Optional vazio quando a conta com o número fornecido não existir")
+    void shouldReturnEmptyWhenAccountDoesNotExist() {
         when(accountRepository.findByAccountNumber(234)).thenReturn(Optional.empty());
 
         Optional<Account> result = accountService.getAccountByNumber(234);
@@ -55,7 +58,8 @@ class AccountServiceTest {
     }
 
     @Test
-    void testCreateAccount_ReturnsAccountDTO_WhenAccountIsCreated() {
+    @DisplayName("Deve retornar um AccountDTO quando a conta for criada com sucesso")
+    void shouldReturnAccountDTOWhenAccountIsCreatedSuccessfully() {
         when(accountRepository.findByAccountNumber(234)).thenReturn(Optional.empty()); // No account found
         when(accountRepository.save(account)).thenReturn(account);
 
@@ -68,7 +72,8 @@ class AccountServiceTest {
     }
 
     @Test
-    void testCreateAccount_ThrowsAccountAlreadyExistsException_WhenAccountAlreadyExists() {
+    @DisplayName("Deve lançar AccountAlreadyExistsException quando a conta já existir")
+    void shouldThrowAccountAlreadyExistsExceptionWhenAccountAlreadyExists() {
         when(accountRepository.findByAccountNumber(234)).thenReturn(Optional.of(account)); // Account exists
 
         AccountAlreadyExistsException thrown = assertThrows(AccountAlreadyExistsException.class, () -> {
