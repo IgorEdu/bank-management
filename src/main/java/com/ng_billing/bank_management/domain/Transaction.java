@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     private TransactionType type;
-    private float value;
+    private BigDecimal value;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -32,20 +33,20 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(UUID id, Account account, TransactionType type, float value) {
+    public Transaction(UUID id, Account account, TransactionType type, BigDecimal value) {
         this.id = id;
         this.account = account;
         this.type = type;
         this.value = value;
     }
 
-    public Transaction(Account account, TransactionType type, float value) {
+    public Transaction(Account account, TransactionType type, BigDecimal value) {
         this.account = account;
         this.type = type;
         this.value = value;
     }
 
-    public Transaction(UUID id, Account account, TransactionType type, float value, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Transaction(UUID id, Account account, TransactionType type, BigDecimal value, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.account = account;
         this.type = type;
@@ -66,7 +67,7 @@ public class Transaction {
         return type;
     }
 
-    public float getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
