@@ -6,6 +6,7 @@ import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
 import com.ng_billing.bank_management.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -31,7 +32,7 @@ public class AccountService {
         return new AccountDTO(account.getAccountNumber(), account.getBalance());
     }
 
-    public void decreaseBalance(Account account, Float value){
+    public void decreaseBalance(Account account, BigDecimal value){
         account.setBalance(value);
         accountRepository.save(account);
     }

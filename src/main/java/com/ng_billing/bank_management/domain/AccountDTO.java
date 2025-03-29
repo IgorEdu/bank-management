@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.math.BigDecimal;
+
 public record AccountDTO(
         @NotNull(message = "Número da conta não pode ser nulo")
         @JsonProperty("numero_conta")
@@ -12,6 +14,6 @@ public record AccountDTO(
         @NotNull(message = "Saldo não pode ser nulo")
         @Positive(message = "Saldo deve ser positivo")
         @JsonProperty("saldo")
-        Float balance
+        BigDecimal balance
 ) {
 }

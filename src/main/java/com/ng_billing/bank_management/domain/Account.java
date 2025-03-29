@@ -2,6 +2,7 @@ package com.ng_billing.bank_management.domain;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -11,18 +12,18 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private int accountNumber;
-    private float balance;
+    private BigDecimal balance;
 
     public Account() {
     }
 
-    public Account(UUID id, int accountNumber, float balance) {
+    public Account(UUID id, int accountNumber, BigDecimal balance) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
 
-    public Account(int accountNumber, float balance) {
+    public Account(int accountNumber, BigDecimal balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
@@ -35,11 +36,11 @@ public class Account {
         return accountNumber;
     }
 
-    public float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 }
