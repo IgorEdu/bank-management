@@ -1,6 +1,6 @@
 CREATE TABLE transactions (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    account UUID NOT NULL,
+    account_id UUID NOT NULL,
     type CHAR(1) NOT NULL CHECK (type IN ('P', 'C', 'D')),
     value DECIMAL(15,2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
