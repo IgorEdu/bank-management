@@ -5,6 +5,7 @@ import com.ng_billing.bank_management.domain.AccountDTO;
 import com.ng_billing.bank_management.domain.Transaction;
 import com.ng_billing.bank_management.domain.TransactionDTO;
 import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
+import com.ng_billing.bank_management.exceptions.InsufficientBalanceException;
 import com.ng_billing.bank_management.service.AccountService;
 import com.ng_billing.bank_management.service.TransactionService;
 import jakarta.validation.Valid;
@@ -52,10 +53,10 @@ public class TransactionController {
                     .toUri();
 
             return ResponseEntity.created(location).body(response);
-        } catch (AccountAlreadyExistsException e) {
+        } catch (InsufficientBalanceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (AccountNotFoundException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
