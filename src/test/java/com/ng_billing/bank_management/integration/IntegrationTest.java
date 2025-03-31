@@ -138,4 +138,40 @@ public class IntegrationTest {
             transactionService.processTransaction(transaction);
         });
     }
+
+    @Test
+    @DisplayName("Deve processar duas transações seguidas com sucesso")
+    void shouldProcessTwoTransactionsSuccessfully() throws AccountNotFoundException {
+        Transaction firstTransaction = new Transaction(testAccount, TransactionType.C, BigDecimal.valueOf(200));
+        transactionService.processTransaction(firstTransaction);
+
+        Account accountAfterFirstTransaction = accountService.getAccountByNumber(123).orElseThrow();
+        assertEquals(BigDecimal.valueOf(790).setScale(2, RoundingMode.HALF_UP), accountAfterFirstTransaction.getBalance());
+
+        Transaction secondTransaction = new Transaction(testAccount, TransactionType.D, BigDecimal.valueOf(100));
+        transactionService.processTransaction(secondTransaction);
+
+        Account accountAfterSecondTransaction = accountService.getAccountByNumber(123).orElseThrow();
+        assertEquals(BigDecimal.valueOf(687).setScale(2, RoundingMode.HALF_UP), accountAfterSecondTransaction.getBalance());
+    }
+
+    @Test
+    @DisplayName("Deve processar uma transação e falhar na segunda por saldo insuficiente")
+    void shouldFailOnSecondTransactionDueToInsufficientBalance() throws AccountNotFoundException {
+        Transaction firstTransaction = new Transaction(testAccount, TransactionType.C, BigDecimal.valueOf(200));
+        transactionService.processTransaction(firstTransaction);
+
+        Account accountAfterFirstTransaction = accountService.getAccountByNumber(123).orElseThrow();
+        assertEquals(BigDecimal.valueOf(790).setScale(2, RoundingMode.HALF_UP), accountAfterFirstTransaction.getBalance());
+
+        Transaction secondTransaction = new Transaction(testAccount, TransactionType.D, BigDecimal.valueOf(790));
+
+        assertThrows(InsufficientBalanceException.class, () -> {
+            transactionService.processTransaction(secondTransaction);
+        });
+
+        Account accountAfterFailedTransaction = accountService.getAccountByNumber(123).orElseThrow();
+        assertEquals(BigDecimal.valueOf(790).setScale(2, RoundingMode.HALF_UP), accountAfterFailedTransaction.getBalance());
+    }
+
 }
