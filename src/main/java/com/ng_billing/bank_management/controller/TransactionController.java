@@ -40,7 +40,7 @@ public class TransactionController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
 
-            Transaction transaction = new Transaction(account.get(), request.type(), request.value());
+            Transaction transaction = new Transaction(account.get(), request.type(), request.amount());
 
             transactionService.processTransaction(transaction);
 

@@ -37,7 +37,7 @@ public class TransactionService {
         Account account = accountService.getAccountByNumber(transaction.getAccount().getAccountNumber())
                 .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada"));
 
-        BigDecimal transactionValue = transaction.getValue();
+        BigDecimal transactionValue = transaction.getAmount();
         TransactionTypeStrategy strategy = transactionStrategies.get(transaction.getType());
 
         if (strategy == null) {

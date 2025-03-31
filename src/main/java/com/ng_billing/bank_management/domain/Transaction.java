@@ -21,7 +21,8 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     private TransactionType type;
-    private BigDecimal value;
+    @Column(name = "amount")
+    private BigDecimal amount;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -33,24 +34,24 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(UUID id, Account account, TransactionType type, BigDecimal value) {
+    public Transaction(UUID id, Account account, TransactionType type, BigDecimal amount) {
         this.id = id;
         this.account = account;
         this.type = type;
-        this.value = value;
+        this.amount = amount;
     }
 
-    public Transaction(Account account, TransactionType type, BigDecimal value) {
+    public Transaction(Account account, TransactionType type, BigDecimal amount) {
         this.account = account;
         this.type = type;
-        this.value = value;
+        this.amount = amount;
     }
 
-    public Transaction(UUID id, Account account, TransactionType type, BigDecimal value, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Transaction(UUID id, Account account, TransactionType type, BigDecimal amount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.account = account;
         this.type = type;
-        this.value = value;
+        this.amount = amount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -67,8 +68,8 @@ public class Transaction {
         return type;
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
     public LocalDateTime getCreatedAt() {

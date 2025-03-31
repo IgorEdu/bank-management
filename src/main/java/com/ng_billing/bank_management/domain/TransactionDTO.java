@@ -18,5 +18,5 @@ public record TransactionDTO(
         @NotNull(message = "Valor não pode ser nulo")
         @Positive(message = "Valor deve ser positivo")
         @JsonProperty("valor")
-        BigDecimal value) {
+        BigDecimal amount) {
 }

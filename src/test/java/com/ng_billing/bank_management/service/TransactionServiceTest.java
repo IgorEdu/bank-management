@@ -57,7 +57,7 @@ class TransactionServiceTest {
 
         verify(transactionRepository).save(transaction);
         assertNotNull(result);
-        assertEquals(transactionValue, result.getValue());
+        assertEquals(transactionValue, result.getAmount());
         assertEquals(TransactionType.D, result.getType());
 
         verify(accountService).decreaseBalance(account, totalAmount);
@@ -80,7 +80,7 @@ class TransactionServiceTest {
 
         verify(transactionRepository).save(transaction);
         assertNotNull(result);
-        assertEquals(transactionValue, result.getValue());
+        assertEquals(transactionValue, result.getAmount());
         assertEquals(TransactionType.C, result.getType());
 
         verify(accountService).decreaseBalance(account, totalAmount);
@@ -101,7 +101,7 @@ class TransactionServiceTest {
 
         verify(transactionRepository).save(transaction);
         assertNotNull(result);
-        assertEquals(transactionValue, result.getValue());
+        assertEquals(transactionValue, result.getAmount());
         assertEquals(TransactionType.P, result.getType());
 
         verify(accountService).decreaseBalance(account, transactionValue);
