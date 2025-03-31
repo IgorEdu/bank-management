@@ -47,7 +47,7 @@ public class TransactionService {
         BigDecimal totalAmount = strategy.calculateTotalAmount(transactionValue);
 
         if (totalAmount.compareTo(account.getBalance()) > 0) {
-            throw new InsufficientBalanceException("Saldo insuficiente para realizar a transação.");
+            throw new InsufficientBalanceException();
         }
 
         Transaction savedTransaction = transactionRepository.save(transaction);

@@ -25,7 +25,7 @@ public class AccountService {
         Optional<Account> existingAccount = accountRepository.findByAccountNumber(account.getAccountNumber());
 
         if (existingAccount.isPresent()) {
-            throw new AccountAlreadyExistsException("Conta de número " + account.getAccountNumber() + " já existente.");
+            throw new AccountAlreadyExistsException(account.getAccountNumber());
         }
 
         accountRepository.save(account);

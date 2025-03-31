@@ -92,7 +92,7 @@ class AccountControllerTest {
     @DisplayName("Deve retornar 400 Bad Request quando a tentar cadastrar conta já existente")
     void shouldReturnBadRequestWhenAccountAlreadyExists() throws Exception {
         when(accountService.createAccount(any(Account.class)))
-                .thenThrow(new AccountAlreadyExistsException("Conta de número 234 já existente."));
+                .thenThrow(new AccountAlreadyExistsException(234));
 
         mockMvc.perform(post("/conta")
                         .contentType(MediaType.APPLICATION_JSON)

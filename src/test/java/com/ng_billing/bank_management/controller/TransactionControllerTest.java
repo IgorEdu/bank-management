@@ -168,7 +168,7 @@ class TransactionControllerTest {
 
         when(accountService.getAccountByNumber(123)).thenReturn(Optional.of(account));
 
-        doThrow(new InsufficientBalanceException("Saldo insuficiente para realizar a transação."))
+        doThrow(new InsufficientBalanceException())
                 .when(transactionService).processTransaction(any(Transaction.class));
 
 
