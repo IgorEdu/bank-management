@@ -26,7 +26,7 @@ Antes de começar, instale os seguintes itens:
 ### **1. Clonar o Repositório**
 ```sh
 git clone https://github.com/IgorEdu/bank-management.git
-cd seu-repositorio
+cd bank-management
 ```
 
 ### **2. Configurar o Banco de Dados**
