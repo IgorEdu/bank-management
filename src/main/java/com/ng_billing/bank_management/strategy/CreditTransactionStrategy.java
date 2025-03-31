@@ -1,7 +1,10 @@
 package com.ng_billing.bank_management.strategy;
 
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 
+@Component
 public class CreditTransactionStrategy implements TransactionTypeStrategy {
     @Override
     public BigDecimal calculateTotalAmount(BigDecimal value) {
