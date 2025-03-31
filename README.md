@@ -1,13 +1,13 @@
 # Projeto de Gestão Bancária
 
 **Descrição:**  
-Este é um sistema de gestão bancária desenvolvido com **Spring Boot**, utilizando uma arquitetura modular e transações seguras. A API permite realizar operações como criação de contas, depósitos, saques e transferências via Pix.
+Este é um sistema de gestão bancária desenvolvido como desafio técnico para NG Billing (Objective). A API simula operações como criação de contas e transações via Pix, cartão de crédito e cartão de débito.
 
 ## Tecnologias Utilizadas
 - **Java 21**
 - **Spring Boot**
 - **Maven**
-- **Banco de Dados** (Definir: MySQL, PostgreSQL, H2, etc.)
+- **Banco de Dados** PostgreSQL
 - **Swagger (OpenAPI) para documentação**
 - **Docker** para containerização
 
