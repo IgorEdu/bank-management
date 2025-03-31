@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
@@ -53,16 +54,27 @@ class TransactionControllerTest {
     @Test
     @DisplayName("Deve processar uma transação de débito e retornar 201 Created")
     void shouldProcessDebitTransactionSuccessfully() throws Exception {
-        TransactionDTO transactionDTO = new TransactionDTO(TransactionType.D, 123, BigDecimal.valueOf(100.00));
+        BigDecimal initialBalance = account.getBalance();
+        BigDecimal transactionAmount = BigDecimal.valueOf(100.00);
+        BigDecimal totalTransactionAmount = transactionAmount.multiply(BigDecimal.valueOf(1.03));
 
-        when(accountService.getAccountByNumber(123)).thenReturn(Optional.of(account));
+        TransactionDTO transactionDTO = new TransactionDTO(TransactionType.C, 123, totalTransactionAmount);
+
+        Account updatedAccount = new Account(123, BigDecimal.valueOf(397.00).setScale(2, RoundingMode.HALF_UP));
+
+        when(accountService.getAccountByNumber(123))
+                .thenReturn(Optional.of(account))
+                .thenReturn(Optional.of(updatedAccount));
 
         mockMvc.perform(post("/transacao")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transactionDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.numero_conta").value(123))
-                .andExpect(jsonPath("$.saldo").exists());
+                .andExpect(jsonPath("$.saldo")
+                        .value(initialBalance.subtract(totalTransactionAmount)
+                                .setScale(2, RoundingMode.HALF_UP).
+                                doubleValue()));
 
         verify(accountService, times(2)).getAccountByNumber(123);
         verify(transactionService, times(1)).processTransaction(any(Transaction.class));
@@ -71,16 +83,27 @@ class TransactionControllerTest {
     @Test
     @DisplayName("Deve processar uma transação de crédito e retornar 201 Created")
     void shouldProcessCreditTransactionSuccessfully() throws Exception {
-        TransactionDTO transactionDTO = new TransactionDTO(TransactionType.C, 123, BigDecimal.valueOf(200.00));
+        BigDecimal initialBalance = account.getBalance();
+        BigDecimal transactionAmount = BigDecimal.valueOf(100.00);
+        BigDecimal totalTransactionAmount = transactionAmount.multiply(BigDecimal.valueOf(1.05));
 
-        when(accountService.getAccountByNumber(123)).thenReturn(Optional.of(account));
+        TransactionDTO transactionDTO = new TransactionDTO(TransactionType.C, 123, totalTransactionAmount);
+
+        Account updatedAccount = new Account(123, BigDecimal.valueOf(395.00).setScale(2, RoundingMode.HALF_UP));
+
+        when(accountService.getAccountByNumber(123))
+                .thenReturn(Optional.of(account))
+                .thenReturn(Optional.of(updatedAccount));
 
         mockMvc.perform(post("/transacao")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transactionDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.numero_conta").value(123))
-                .andExpect(jsonPath("$.saldo").exists());
+                .andExpect(jsonPath("$.saldo")
+                        .value(initialBalance.subtract(totalTransactionAmount)
+                                .setScale(2, RoundingMode.HALF_UP).
+                                doubleValue()));
 
         verify(accountService, times(2)).getAccountByNumber(123);
         verify(transactionService, times(1)).processTransaction(any(Transaction.class));
@@ -89,16 +112,23 @@ class TransactionControllerTest {
     @Test
     @DisplayName("Deve processar uma transação Pix e retornar 201 Created")
     void shouldProcessPixTransactionSuccessfully() throws Exception {
-        TransactionDTO transactionDTO = new TransactionDTO(TransactionType.P, 123, BigDecimal.valueOf(50.00));
+        BigDecimal initialBalance = account.getBalance();
+        BigDecimal transactionAmount = BigDecimal.valueOf(50.00);
 
-        when(accountService.getAccountByNumber(123)).thenReturn(Optional.of(account));
+        Account updatedAccount = new Account(123, BigDecimal.valueOf(450.00));
+
+        TransactionDTO transactionDTO = new TransactionDTO(TransactionType.P, 123, transactionAmount);
+
+        when(accountService.getAccountByNumber(123))
+                .thenReturn(Optional.of(account))
+                .thenReturn(Optional.of(updatedAccount));
 
         mockMvc.perform(post("/transacao")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transactionDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.numero_conta").value(123))
-                .andExpect(jsonPath("$.saldo").exists());
+                .andExpect(jsonPath("$.saldo").value(initialBalance.subtract(transactionAmount)));
 
         verify(accountService, times(2)).getAccountByNumber(123);
         verify(transactionService, times(1)).processTransaction(any(Transaction.class));
