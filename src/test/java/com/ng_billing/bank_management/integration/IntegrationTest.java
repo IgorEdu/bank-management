@@ -4,6 +4,7 @@ import com.ng_billing.bank_management.domain.Account;
 import com.ng_billing.bank_management.domain.Transaction;
 import com.ng_billing.bank_management.domain.TransactionType;
 import com.ng_billing.bank_management.infra.exceptions.AccountAlreadyExistsException;
+import com.ng_billing.bank_management.infra.exceptions.AccountNotFoundException;
 import com.ng_billing.bank_management.infra.exceptions.InsufficientBalanceException;
 import com.ng_billing.bank_management.repository.AccountRepository;
 import com.ng_billing.bank_management.repository.TransactionRepository;
@@ -19,7 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;

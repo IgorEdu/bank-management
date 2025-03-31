@@ -153,7 +153,7 @@ class TransactionControllerTest {
     @Test
     @DisplayName("Deve retornar 400 Bad Request quando a transação for inválida")
     void shouldReturnBadRequestWhenTransactionIsInvalid() throws Exception {
-        TransactionDTO invalidTransactionDTO = new TransactionDTO(TransactionType.D, 0, BigDecimal.valueOf(-50));
+        TransactionDTO invalidTransactionDTO = new TransactionDTO(TransactionType.D, 234, BigDecimal.valueOf(-50));
 
         mockMvc.perform(post("/transacao")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -162,8 +162,8 @@ class TransactionControllerTest {
     }
 
     @Test
-    @DisplayName("Deve retornar 400 Bad Request quando o saldo for insuficiente")
-    void shouldReturnBadRequestWhenInsufficientBalance() throws Exception {
+    @DisplayName("Deve retornar 404 Not Found quando o saldo for insuficiente")
+    void shouldReturnNotFoundWhenInsufficientBalance() throws Exception {
         TransactionDTO transactionDTO = new TransactionDTO(TransactionType.P, 123, BigDecimal.valueOf(501));
 
         when(accountService.getAccountByNumber(123)).thenReturn(Optional.of(account));
@@ -175,7 +175,7 @@ class TransactionControllerTest {
         mockMvc.perform(post("/transacao")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transactionDTO)))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("Saldo insuficiente para realizar a transação.")));
 
         verify(accountService, times(1)).getAccountByNumber(123);

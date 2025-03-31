@@ -4,6 +4,7 @@ import com.ng_billing.bank_management.domain.Account;
 import com.ng_billing.bank_management.domain.AccountDTO;
 import com.ng_billing.bank_management.domain.Transaction;
 import com.ng_billing.bank_management.domain.TransactionDTO;
+import com.ng_billing.bank_management.infra.exceptions.AccountNotFoundException;
 import com.ng_billing.bank_management.infra.exceptions.InsufficientBalanceException;
 import com.ng_billing.bank_management.service.AccountService;
 import com.ng_billing.bank_management.service.TransactionService;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.net.URI;
 import java.util.Optional;
 
@@ -53,7 +53,7 @@ public class TransactionController {
 
             return ResponseEntity.created(location).body(response);
         } catch (InsufficientBalanceException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (AccountNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
