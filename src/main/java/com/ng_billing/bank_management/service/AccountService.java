@@ -2,7 +2,7 @@ package com.ng_billing.bank_management.service;
 
 import com.ng_billing.bank_management.domain.Account;
 import com.ng_billing.bank_management.domain.AccountDTO;
-import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
+import com.ng_billing.bank_management.infra.exceptions.AccountAlreadyExistsException;
 import com.ng_billing.bank_management.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 

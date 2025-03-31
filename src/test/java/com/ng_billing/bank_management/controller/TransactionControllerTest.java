@@ -2,7 +2,7 @@ package com.ng_billing.bank_management.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ng_billing.bank_management.domain.*;
-import com.ng_billing.bank_management.exceptions.InsufficientBalanceException;
+import com.ng_billing.bank_management.infra.exceptions.InsufficientBalanceException;
 import com.ng_billing.bank_management.service.AccountService;
 import com.ng_billing.bank_management.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;

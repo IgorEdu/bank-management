@@ -3,7 +3,7 @@ package com.ng_billing.bank_management.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ng_billing.bank_management.domain.Account;
 import com.ng_billing.bank_management.domain.AccountDTO;
-import com.ng_billing.bank_management.exceptions.AccountAlreadyExistsException;
+import com.ng_billing.bank_management.infra.exceptions.AccountAlreadyExistsException;
 import com.ng_billing.bank_management.service.AccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -3,7 +3,7 @@ package com.ng_billing.bank_management.service;
 import com.ng_billing.bank_management.domain.Account;
 import com.ng_billing.bank_management.domain.Transaction;
 import com.ng_billing.bank_management.domain.TransactionType;
-import com.ng_billing.bank_management.exceptions.InsufficientBalanceException;
+import com.ng_billing.bank_management.infra.exceptions.InsufficientBalanceException;
 import com.ng_billing.bank_management.repository.TransactionRepository;
 import com.ng_billing.bank_management.strategy.CreditTransactionStrategy;
 import com.ng_billing.bank_management.strategy.DebitTransactionStrategy;
