@@ -2,6 +2,7 @@ package com.ng_billing.bank_management.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ng_billing.bank_management.domain.*;
+import com.ng_billing.bank_management.exceptions.InsufficientBalanceException;
 import com.ng_billing.bank_management.service.AccountService;
 import com.ng_billing.bank_management.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -129,5 +131,26 @@ class TransactionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidTransactionDTO)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 Bad Request quando o saldo for insuficiente")
+    void shouldReturnBadRequestWhenInsufficientBalance() throws Exception {
+        TransactionDTO transactionDTO = new TransactionDTO(TransactionType.P, 123, BigDecimal.valueOf(501));
+
+        when(accountService.getAccountByNumber(123)).thenReturn(Optional.of(account));
+
+        doThrow(new InsufficientBalanceException("Saldo insuficiente para realizar a transação."))
+                .when(transactionService).processTransaction(any(Transaction.class));
+
+
+        mockMvc.perform(post("/transacao")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(transactionDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Saldo insuficiente para realizar a transação.")));
+
+        verify(accountService, times(1)).getAccountByNumber(123);
+        verify(transactionService, times(1)).processTransaction(any(Transaction.class));
     }
 }
