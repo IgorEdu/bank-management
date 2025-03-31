@@ -17,7 +17,7 @@ Este é um sistema de gestão bancária desenvolvido como desafio técnico para 
 
 ### 🔹 **Pré-requisitos**
 Antes de começar, instale os seguintes itens:
-- [Java 21+](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+- [Java 21+](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
 - [Maven](https://maven.apache.org/download.cgi)
 - [Docker](https://www.docker.com/get-started)
 
